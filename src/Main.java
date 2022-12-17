@@ -85,15 +85,11 @@ public class Main {
         String[] words = str.split(" ");
         ArrayList<String> result = new ArrayList<>();
 
-//        ArrayList<String> result = new ArrayList<>();
         // чтобы не было ошибок, добавляем пустые строки в ArrayList
         result.add("");
         result.add("");
         result.add("");
-//        // если меньше трёх слов
-//        if (words.length < 3) {
-//
-//        }
+
         // перебираем все слова
         for (String word : words) {
             // сравниваем с самым коротким словом из списка длинных слов с текущим словом
