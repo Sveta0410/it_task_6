@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
@@ -6,6 +8,12 @@ public class Main {
         System.out.println(bell(1));
         System.out.println(bell(2));
         System.out.println(bell(3));
+
+        System.out.println("Задание 3");
+        System.out.println(validColor("rgb(0,0,0)"));
+        System.out.println(validColor("rgb(0,,0)"));
+        System.out.println(validColor("rgb(255,256,255)"));
+        System.out.println(validColor("rgba(0,0,0,0.123456789)"));
 
         System.out.println("Задание 4");
         String[] array1 = new String[]{"b"};
@@ -76,6 +84,43 @@ public class Main {
             }
         }
         return result;
+    }
+
+
+    // принимаем строку (например, " rgb(0, 0, 0)") и возвращаем true, если ее формат правильный,
+    // в противном случае возвращаем false
+    public static boolean validColor(String str) {
+        // d+ - одна цифра и более
+        Pattern pattern1 = Pattern.compile("rgb\\(\\d+,\\d+,\\d+\\)");
+        Matcher matcher1 = pattern1.matcher(str);
+        // если строка не соответствует условиям rgb( , , , )
+        if (!matcher1.matches()) {
+            // 1|(0(\.\d+)?) = 1 или 0 с числами после точки
+            // (\.\d+)? - чисел после точки может не быть
+            Pattern pattern2 = Pattern.compile("rgba\\(\\d+,\\d+,\\d+,(1|(0(\\.\\d+)?))\\)");
+            Matcher matcher2 = pattern2.matcher(str);
+            if (!matcher2.matches()) {
+                return false;
+            } else {
+                // оставляем в строке только цифры
+                str = str.substring("rgba(".length(), str.length() - 1);
+                String[] numbers = str.split(",");
+                // если первые два числа НЕ больше нуля и НЕ меньше 255
+                if (!(Integer.parseInt(numbers[0]) <= 255 &&  Integer.parseInt(numbers[0]) >= 0)){
+                    return false;
+                } else return Integer.parseInt(numbers[1]) <= 255 && Integer.parseInt(numbers[1]) >= 0;
+            }
+        } else {
+            // оставляем в строке только цифры
+            str = str.substring("rgb(".length(), str.length() - 1);
+            String[] numbers = str.split(",");
+            for (String i : numbers){
+                if (!(Integer.parseInt(i) <= 255 &&  Integer.parseInt(i) >= 0)) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
     // принимаем URL (строку), удаляем дублирующиеся параметры запроса и параметры, указанные во втором аргументе
