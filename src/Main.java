@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
@@ -6,6 +8,13 @@ public class Main {
         System.out.println(bell(1));
         System.out.println(bell(2));
         System.out.println(bell(3));
+
+        System.out.println("Задание 5");
+        System.out.println(Arrays.toString(getHashTags("How the Avocado Became the Fruit of the Global Trade")));
+        System.out.println(Arrays.toString(getHashTags(
+                "Why You Will Probably Pay More for Your Christmas Tree This Year")));
+        System.out.println(Arrays.toString(getHashTags("Hey Parents, Surprise, Fruit Juice Is Not Fruit")));
+        System.out.println(Arrays.toString(getHashTags("Visualizing Science")));
 
         System.out.println("Задание 6");
         System.out.println(ulam(4));
@@ -64,6 +73,70 @@ public class Main {
         }
         return result;
     }
+
+    // извлекаем три самых длинных слова из заголовка газеты и преобразовываем их в хэштеги
+    /*
+    если несколько слов одинаковой длины, находим слово, которое встречается первым
+    если заголовок содержит менее 3 слов, распологаем слова в заголовке по длине в порядке убывания
+    */
+    public static String[] getHashTags(String str) {
+        // убираем все знаки препинания
+        str = str.replaceAll("\\p{Punct}", "");
+        String[] words = str.split(" ");
+        ArrayList<String> result = new ArrayList<>();
+
+//        ArrayList<String> result = new ArrayList<>();
+        // чтобы не было ошибок, добавляем пустые строки в ArrayList
+        result.add("");
+        result.add("");
+        result.add("");
+//        // если меньше трёх слов
+//        if (words.length < 3) {
+//
+//        }
+        // перебираем все слова
+        for (String word : words) {
+            // сравниваем с самым коротким словом из списка длинных слов с текущим словом
+            // +1 т.к. учитываем #
+            if (word.length() + 1 > result.get(2).length()) {
+                // сравнимаем со вторым словом
+                if (word.length() + 1 > result.get(1).length()) {
+                    // сравниваем с первым
+                    if (word.length() + 1 > result.get(0).length()) {
+                        // текущее слово ставим на первое место
+                        result.set(2, result.get(1));
+                        result.set(1, result.get(0));
+                        result.set(0, "#" + word.toLowerCase());
+                    } else {
+                        // текущее слово ставим на второе место
+                        result.set(2, result.get(1));
+                        result.set(1, "#" + word.toLowerCase());
+                    }
+                } else {
+                    // текущее слово ставим на третье место
+                    result.set(2, "#" + word.toLowerCase());
+                }
+            }
+        }
+        // результат - массив из строк
+        // определяем размеры массива
+        int size = result.size();
+        // если последний элемент списка пустой - делаем массив на единицу меньше
+        if ("".equals(result.get(2))){
+            size--;
+        } else if ("".equals(result.get(1))){
+            size -= 2;
+        }
+        String[] answer = new String[size];
+        for (int i = 0; i < result.size(); i++) {
+            if (!"".equals(result.get(i))){
+                answer[i] = result.get(i);
+            }
+        }
+        return answer;
+    }
+
+
 
     // принимаем число n и возвращаем n-е число в последовательности Улама
     /*
