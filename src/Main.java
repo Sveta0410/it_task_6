@@ -9,6 +9,14 @@ public class Main {
         System.out.println(bell(2));
         System.out.println(bell(3));
 
+        System.out.println("Задание 2");
+        System.out.println(translateWord("flag"));
+        System.out.println(translateWord("Apple"));
+        System.out.println(translateWord("button"));
+        System.out.println(translateWord(""));
+        System.out.println(translateSentence("I like to eat honey waffles."));
+        System.out.println(translateSentence("Do you think it is going to rain today?"));
+
         System.out.println("Задание 3");
         System.out.println(validColor("rgb(0,0,0)"));
         System.out.println(validColor("rgb(0,,0)"));
@@ -86,6 +94,68 @@ public class Main {
         return result;
     }
 
+    // переводчик с английского на свинский латинский
+    public static String translateWord(String str) {
+        if ("".equals(str)) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder();
+        String firstLetter = String.valueOf(str.charAt(0));
+        String lastLetter = String.valueOf(str.charAt(str.length() - 1));
+        String vowels = "aeiouyAEIOUY";
+        // если первая буква - глассная
+        if (vowels.contains(firstLetter)) {
+            // если после слова стоит знак препинания
+            if ("!.,?".contains(lastLetter)) {
+                result.append(str, 0, str.length() - 1).append("yay").append(lastLetter);
+            } else {
+                result.append(str).append("yay");
+            }
+        } else {
+            // делим слово на массив из букв
+            String[] strArr = str.split("");
+            // согласные, найденные до гласной
+            StringBuilder consonant = new StringBuilder();
+            // перебираем буквы в слове
+            for (String i : strArr) {
+                // пока не нашли первую гласную
+                if (!vowels.contains(i)) {
+                    consonant.append(i);
+                } else {
+                    // убираем согласные из начала слова
+                    str = str.substring(consonant.length());
+                    if ("!.,?".contains(lastLetter)) {
+                        result.append(str, 0, str.length() - 1)
+                                .append(consonant).append("ay").append(lastLetter);
+                    } else {
+                        result.append(str).append(consonant).append("ay");
+                    }
+                    break;
+                }
+            }
+        }
+        return result.toString();
+    }
+
+
+    public static String translateSentence(String str) {
+        String[] words = str.split(" ");
+        StringBuilder result = new StringBuilder();
+        StringBuilder word;
+        String firstLetter = String.valueOf(str.charAt(0)).toUpperCase();
+        // перебираем слова и переводим из, использую ранее написанную функцию
+        for (int i = 0; i < words.length; i++) {
+            word = new StringBuilder(translateWord(words[i]));
+            // если это первое слово в предложении
+            if (i == 0) {
+                word = new StringBuilder(firstLetter + word.toString().toLowerCase().substring(1));
+            }
+            result.append(word).append(" ");
+        }
+        // убираем последний пробел
+        result.setLength(result.length() - 1);
+        return result.toString();
+    }
 
     // принимаем строку (например, " rgb(0, 0, 0)") и возвращаем true, если ее формат правильный,
     // в противном случае возвращаем false
@@ -106,7 +176,7 @@ public class Main {
                 str = str.substring("rgba(".length(), str.length() - 1);
                 String[] numbers = str.split(",");
                 // если первые два числа НЕ больше нуля и НЕ меньше 255
-                if (!(Integer.parseInt(numbers[0]) <= 255 &&  Integer.parseInt(numbers[0]) >= 0)){
+                if (!(Integer.parseInt(numbers[0]) <= 255 && Integer.parseInt(numbers[0]) >= 0)) {
                     return false;
                 } else return Integer.parseInt(numbers[1]) <= 255 && Integer.parseInt(numbers[1]) >= 0;
             }
@@ -114,8 +184,8 @@ public class Main {
             // оставляем в строке только цифры
             str = str.substring("rgb(".length(), str.length() - 1);
             String[] numbers = str.split(",");
-            for (String i : numbers){
-                if (!(Integer.parseInt(i) <= 255 &&  Integer.parseInt(i) >= 0)) {
+            for (String i : numbers) {
+                if (!(Integer.parseInt(i) <= 255 && Integer.parseInt(i) >= 0)) {
                     return false;
                 }
             }
