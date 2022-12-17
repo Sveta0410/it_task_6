@@ -5,11 +5,16 @@ public class Main {
         System.out.println(bell(2));
         System.out.println(bell(3));
 
+        System.out.println("Задание 8");
+        System.out.println(convertToRoman(2));
+        System.out.println(convertToRoman(12));
+        System.out.println(convertToRoman(16));
+
+
         System.out.println("Задание 9");
         System.out.println(formula("6 * 4 = 24"));
         System.out.println(formula("18 / 17 = 2"));
         System.out.println(formula("16 * 10 = 160 = 14 + 120"));
-
 
         System.out.println("Задание 10");
         System.out.println(palindromedescendant(11211230));
@@ -46,6 +51,54 @@ public class Main {
             }
         }
         return result;
+    }
+
+    // принимаем арабское число и преобразуем его в римское число
+    public static String convertToRoman(int num) {
+        StringBuilder result = new StringBuilder();
+        while (num > 0) {
+            if (num >= 1000) {
+                num -= 1000;
+                result.append("M");
+            } else if (num >= 900) {
+                num -= 900;
+                result.append("CM");
+            }  else if (num >= 500) {
+                num -= 500;
+                result.append("D");
+            } else if (num >= 400) {
+                num -= 400;
+                result.append("CD");
+            } else if (num >= 100) {
+                num -= 100;
+                result.append("C");
+            } else if (num >= 90) {
+                num -= 90;
+                result.append("XC");
+            } else if (num >= 50) {
+                num -= 50;
+                result.append("L");
+            } else if (num >= 40) {
+                num -= 40;
+                result.append("XL");
+            } else if (num >= 10) {
+                num -= 10;
+                result.append("X");
+            } else if (num >= 9) {
+                num -= 9;
+                result.append("IX");
+            } else if (num >= 5) {
+                num -= 5;
+                result.append("V");
+            } else if (num == 4) {
+                num -= 4;
+                result.append("IV");
+            } else {
+                num -= 1;
+                result.append("I");
+            }
+        }
+        return result.toString();
     }
 
     // принимаем строку и возвращаем true или false в зависимости от того, является ли формула правильной или нет
