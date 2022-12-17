@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Main {
     public static void main(String[] args) {
         System.out.println("Задание 1");
@@ -5,11 +7,16 @@ public class Main {
         System.out.println(bell(2));
         System.out.println(bell(3));
 
+        System.out.println("Задание 7");
+        System.out.println(longestNonrepeatingSubstring("abcabcbb"));
+        System.out.println(longestNonrepeatingSubstring("aaaaaa"));
+        System.out.println(longestNonrepeatingSubstring("abcde"));
+        System.out.println(longestNonrepeatingSubstring("abcda"));
+
         System.out.println("Задание 8");
         System.out.println(convertToRoman(2));
         System.out.println(convertToRoman(12));
         System.out.println(convertToRoman(16));
-
 
         System.out.println("Задание 9");
         System.out.println(formula("6 * 4 = 24"));
@@ -51,6 +58,37 @@ public class Main {
             }
         }
         return result;
+    }
+
+
+    // возвращаем самую длинную неповторяющуюся подстроку для строкового ввода
+    public static String longestNonrepeatingSubstring(String str) {
+        int maxLength = 0;
+        StringBuilder result = new StringBuilder();
+//        StringBuilder temp = new StringBuilder();
+        ArrayList<String> strings = new ArrayList<>();
+        String[] strArr = str.split("");
+        for (String i : strArr){
+            // если символа в строке нет
+            if (result.indexOf(i) == -1) {
+                result.append(i);
+            } else {
+                strings.add(result.toString());
+                // обрезаем строчку по индексу символа, который посторился (первый из пары)
+                result = new StringBuilder(result.substring(result.indexOf(i) + 1));
+                result.append(i);
+            }
+        }
+        // добавляем последнюю строчку
+        strings.add(result.toString());
+        String answer = "";
+        // перебираем все элементы массива из строк с неповторяющимися символами и находим строку максимальной длины
+        for (String i : strings) {
+            if (i.length() > answer.length()) {
+                answer = i;
+            }
+        }
+        return answer;
     }
 
     // принимаем арабское число и преобразуем его в римское число
