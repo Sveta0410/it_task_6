@@ -7,6 +7,11 @@ public class Main {
         System.out.println(bell(2));
         System.out.println(bell(3));
 
+        System.out.println("Задание 6");
+        System.out.println(ulam(4));
+        System.out.println(ulam(9));
+        System.out.println(ulam(206));
+
         System.out.println("Задание 7");
         System.out.println(longestNonrepeatingSubstring("abcabcbb"));
         System.out.println(longestNonrepeatingSubstring("aaaaaa"));
@@ -60,6 +65,49 @@ public class Main {
         return result;
     }
 
+    // принимаем число n и возвращаем n-е число в последовательности Улама
+    /*
+    Последовательность Улама начинается с 1,2
+    Следующее число в последовательности - это наименьшее положительное число, равное
+    сумме двух разных чисел (которые уже есть в последовательности) ровно одним
+    способом.
+     */
+    public static int ulam(int num) {
+        int count;
+        int sum = 2;
+        ArrayList<Integer> ulam = new ArrayList<>();
+        ulam.add(1);
+        ulam.add(2);
+        // пока мы не добавили заданное количество жлементов в последовательность
+        while (ulam.size() < num) {
+            count = 0;
+            sum++; //для каждой итерации увеличиваем сумму на 1 (и проверяем, подходит ли наша сумма под условия Улама)
+            // перебираем все элементы
+            for (int i = 0; i < ulam.size(); i++) {
+                for (int j = i + 1; j < ulam.size(); j++) {
+                    if (ulam.get(i) + ulam.get(j) == sum) {
+                        count++; // увеличиваем количество способов получения числа
+                    }
+                    // если способов получения больше одного, эти значения не берём
+                    if (count > 1) {
+                        break;
+                    }
+                }
+                // если к первому числу пары мы не смогли подобрать второе,
+                // чтобы пар удовлетворяла условиям, берём следующее
+                if (count > 1) {
+                    break;
+                }
+            }
+            // если после всего перебора мы нашли подходящуу пару, добавляем сумму в список с числами Улама
+            if (count == 1) {
+                ulam.add(sum);
+            }
+        }
+        // возвращаем последний элемент последовательности
+        return ulam.get(ulam.size()-1);
+    }
+
 
     // возвращаем самую длинную неповторяющуюся подстроку для строкового ввода
     public static String longestNonrepeatingSubstring(String str) {
@@ -68,7 +116,7 @@ public class Main {
 //        StringBuilder temp = new StringBuilder();
         ArrayList<String> strings = new ArrayList<>();
         String[] strArr = str.split("");
-        for (String i : strArr){
+        for (String i : strArr) {
             // если символа в строке нет
             if (result.indexOf(i) == -1) {
                 result.append(i);
@@ -101,7 +149,7 @@ public class Main {
             } else if (num >= 900) {
                 num -= 900;
                 result.append("CM");
-            }  else if (num >= 500) {
+            } else if (num >= 500) {
                 num -= 500;
                 result.append("D");
             } else if (num >= 400) {
