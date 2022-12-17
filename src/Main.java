@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,6 +6,12 @@ public class Main {
         System.out.println(bell(1));
         System.out.println(bell(2));
         System.out.println(bell(3));
+
+        System.out.println("Задание 4");
+        String[] array1 = new String[]{"b"};
+        System.out.println(stripUrlParams("https://edabit.com?a=1&b=2&a=2"));
+        System.out.println(stripUrlParams("https://edabit.com?a=1&b=2&a=2", array1));
+        System.out.println(stripUrlParams("https://edabit.com", array1));
 
         System.out.println("Задание 5");
         System.out.println(Arrays.toString(getHashTags("How the Avocado Became the Fruit of the Global Trade")));
@@ -74,6 +78,40 @@ public class Main {
         return result;
     }
 
+    // принимаем URL (строку), удаляем дублирующиеся параметры запроса и параметры, указанные во втором аргументе
+    // (который является необязательным массивом)
+    public static String stripUrlParams(String url) {
+        return stripUrlParams(url, new String[]{""});
+    }
+
+    public static String stripUrlParams(String url, String[] toStrip) {
+        // если в url параметров нет, сразу возвращаем просто url
+        if (!url.contains("?")) {
+            return url;
+        }
+        // hashmap для хранения пар запроса = буква + число
+        HashMap<String, String> pairs = new HashMap<>();
+        // делим url на части = адрес + параметры запроса
+        String[] urlArr = url.split("\\?");
+        String[] params = urlArr[1].split("&");
+        // перебираем все пары параметров и добавляем в hashmap (повторяющихся элементов не будет)
+        for (String i : params) {
+            String[] temp = i.split("=");
+            pairs.put(temp[0], temp[1]);
+        }
+        StringBuilder result = new StringBuilder(urlArr[0] + "?");
+        List<String> toStripList = Arrays.asList(toStrip);
+        for (String key : pairs.keySet()) {
+            if (!toStripList.contains(key)) {
+                result.append(key).append("=").append(pairs.get(key)).append("&");
+            }
+        }
+        // убираем последний символ в ответе ("&")
+        result.setLength(result.length() - 1);
+        return result.toString();
+
+    }
+
     // извлекаем три самых длинных слова из заголовка газеты и преобразовываем их в хэштеги
     /*
     если несколько слов одинаковой длины, находим слово, которое встречается первым
@@ -118,20 +156,19 @@ public class Main {
         // определяем размеры массива
         int size = result.size();
         // если последний элемент списка пустой - делаем массив на единицу меньше
-        if ("".equals(result.get(2))){
+        if ("".equals(result.get(2))) {
             size--;
-        } else if ("".equals(result.get(1))){
+        } else if ("".equals(result.get(1))) {
             size -= 2;
         }
         String[] answer = new String[size];
         for (int i = 0; i < result.size(); i++) {
-            if (!"".equals(result.get(i))){
+            if (!"".equals(result.get(i))) {
                 answer[i] = result.get(i);
             }
         }
         return answer;
     }
-
 
 
     // принимаем число n и возвращаем n-е число в последовательности Улама
@@ -174,15 +211,13 @@ public class Main {
             }
         }
         // возвращаем последний элемент последовательности
-        return ulam.get(ulam.size()-1);
+        return ulam.get(ulam.size() - 1);
     }
 
 
     // возвращаем самую длинную неповторяющуюся подстроку для строкового ввода
     public static String longestNonrepeatingSubstring(String str) {
-        int maxLength = 0;
         StringBuilder result = new StringBuilder();
-//        StringBuilder temp = new StringBuilder();
         ArrayList<String> strings = new ArrayList<>();
         String[] strArr = str.split("");
         for (String i : strArr) {
@@ -239,7 +274,7 @@ public class Main {
             } else if (num >= 10) {
                 num -= 10;
                 result.append("X");
-            } else if (num >= 9) {
+            } else if (num == 9) {
                 num -= 9;
                 result.append("IX");
             } else if (num >= 5) {
@@ -297,7 +332,6 @@ public class Main {
     // функция возвращает true, если число является палиндромом или любой из его потомков вплоть до 2 цифр
     // (однозначное число - тривиально палиндром)
     public static boolean palindromedescendant(int num) {
-        int result = 0;
         // делаем из числа строку
         StringBuilder numStr = new StringBuilder(Integer.toString(num));
 
@@ -310,7 +344,7 @@ public class Main {
             if (String.valueOf(numStr).equals(numStr.reverse().toString())) {
                 return true;
             } else {
-                StringBuilder res = new StringBuilder("");
+                StringBuilder res = new StringBuilder();
                 // перебираем все пары (составляем новое число)
                 for (int i = 0; i < numStr.length(); i += 2) {
                     // -48 т.к. считается в ascii
