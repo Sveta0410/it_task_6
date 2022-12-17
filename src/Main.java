@@ -5,14 +5,18 @@ public class Main {
         System.out.println(bell(2));
         System.out.println(bell(3));
 
+        System.out.println("Задание 9");
+        System.out.println(formula("6 * 4 = 24"));
+        System.out.println(formula("18 / 17 = 2"));
+        System.out.println(formula("16 * 10 = 160 = 14 + 120"));
+
+
         System.out.println("Задание 10");
         System.out.println(palindromedescendant(11211230));
         System.out.println(palindromedescendant(13001120));
         System.out.println(palindromedescendant(23336014));
         System.out.println(palindromedescendant(11));
         System.out.println(palindromedescendant(121214));
-
-
     }
 
     // Число Белла - кол-во способов, которыми массив из n элементов может быть разбит на непустые подмножества.
@@ -43,6 +47,43 @@ public class Main {
         }
         return result;
     }
+
+    // принимаем строку и возвращаем true или false в зависимости от того, является ли формула правильной или нет
+    public static boolean formula(String str) {
+        // убираем из строки все пробелы
+        str = str.replace(" ", "");
+        // делим строку на части по пробелам
+        String[] parts = str.split("=");
+        // запоминаем первое значение (с ним будем сравнивать всё остальное)
+        float firstPart = partResult(parts[0]);
+        // перебираем все части
+        for (String part : parts) {
+            // если хоть одна часть не равна первой - выражение неверно, возвращаем false
+            if (firstPart != partResult(part)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // вспомогательная функция, которая ищет результат вычислений в каждой части
+    public static float partResult(String s) {
+        if (s.contains("+")) {
+            String[] numbers = s.split("\\+"); // экранируем плюсик
+            return Float.parseFloat(numbers[0]) + Float.parseFloat(numbers[1]);
+        } else if (s.contains("-")) {
+            String[] numbers = s.split("-");
+            return Float.parseFloat(numbers[0]) - Float.parseFloat(numbers[1]);
+        } else if (s.contains("*")) {
+            String[] numbers = s.split("\\*");
+            return Float.parseFloat(numbers[0]) * Float.parseFloat(numbers[1]);
+        } else if (s.contains("/")) {
+            String[] numbers = s.split("/");
+            return Float.parseFloat(numbers[0]) / Float.parseFloat(numbers[1]);
+        }
+        return Float.parseFloat(s);
+    }
+
 
     // Прямой потомок числа = сумма каждой пары соседних цифр (они являются цифрами следующего числа)
     // функция возвращает true, если число является палиндромом или любой из его потомков вплоть до 2 цифр
