@@ -4,6 +4,15 @@ public class Main {
         System.out.println(bell(1));
         System.out.println(bell(2));
         System.out.println(bell(3));
+
+        System.out.println("Задание 10");
+        System.out.println(palindromedescendant(11211230));
+        System.out.println(palindromedescendant(13001120));
+        System.out.println(palindromedescendant(23336014));
+        System.out.println(palindromedescendant(11));
+        System.out.println(palindromedescendant(121214));
+
+
     }
 
     // Число Белла - кол-во способов, которыми массив из n элементов может быть разбит на непустые подмножества.
@@ -33,5 +42,33 @@ public class Main {
             }
         }
         return result;
+    }
+
+    // Прямой потомок числа = сумма каждой пары соседних цифр (они являются цифрами следующего числа)
+    // функция возвращает true, если число является палиндромом или любой из его потомков вплоть до 2 цифр
+    // (однозначное число - тривиально палиндром)
+    public static boolean palindromedescendant(int num) {
+        int result = 0;
+        // делаем из числа строку
+        StringBuilder numStr = new StringBuilder(Integer.toString(num));
+
+        while (true) {
+            // если количество цифр нечётное
+            if (numStr.length() % 2 != 0) {
+                // проверяем, является ли число палиндромом
+                return String.valueOf(numStr).equals(numStr.reverse().toString());
+            }
+            if (String.valueOf(numStr).equals(numStr.reverse().toString())) {
+                return true;
+            } else {
+                StringBuilder res = new StringBuilder("");
+                // перебираем все пары (составляем новое число)
+                for (int i = 0; i < numStr.length(); i += 2) {
+                    // -48 т.к. считается в ascii
+                    res.append(numStr.charAt(i) - 48 + numStr.charAt(i + 1) - 48);
+                }
+                numStr = res;
+            }
+        }
     }
 }
